@@ -1,6 +1,6 @@
-IS-4543-002 Project
+HogPilot's project for his IS-4543-002 class
 
-Execution steps:
+Execution steps on completion:
 	User inputs prospective password
 	User Inputs Website Name + other Keywords
 	Password is checked to see if it follows set complexity requirements

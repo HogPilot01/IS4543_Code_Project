@@ -4,6 +4,8 @@ import sys
 
 def main():
     take_input()
+    # redundant call with calls in regex_check()
+    # Remove???
     smooth_exit()
 
 
