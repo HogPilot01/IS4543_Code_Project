@@ -3,11 +3,11 @@ import sys
 
 
 def main():
-    print_input()
+    take_input()
     smooth_exit()
 
 
-def print_input():
+def take_input():
     # Takes in user input and prints it out
     password = input("Please enter the Password you wish to check: ")
     # passes the input to the checking method(s)
@@ -36,7 +36,7 @@ def smooth_exit():
         print("Exiting the Password Checker")
         sys.exit()
     else:
-        print_input()
+        take_input()
 
 
 # Code placed here is executed when run in cmd line
