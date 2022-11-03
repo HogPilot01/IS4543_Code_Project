@@ -48,23 +48,34 @@ def regex_check(password):
     if not check:
         password_5_digits = False
 
-    # dictionary checker: checks against dictionary words
-    # will only run if all previous checks pass, otherwise will skip to save resources
-    #    password_dict_check_run = False
-    #    if password_length & password_special_characters & password_character_checker & (password_5_digits is False):
-    #        password_dict_check_run = True
-    #        dict_file = open('words.txt', 'r')
-    #        password_dict_checker = bool(re.findall(password, dict_file.read()))
-    #    else:
-    #        print("dictionary check skipped ")
-    #        # TODO skip dict check
+        # dictionary checker: checks against dictionary words
+        # will only run if all previous checks pass, otherwise will skip to save resources
+        password_dict_checker = False
+        if password_length & password_special_characters & password_character_checker & (password_5_digits is False):
+            print("Dictionary Word Checker is running.\n"
+                  "Found words will be printed below.\n"
+                  "This may take some time...\n")
+            dict_file = open('Top1575-probable-v2.txt', 'r')
+            password_dict_checker = True
+            # password_dict_words = (re.findall(dict_file.readline(), password))
+            for line in dict_file:
+                if (line.strip()) in password:
+                    print('\"' + line.strip() + "\" is an illegal word ")
+                    password_dict_checker = False
+
+            # password_dict_checker = not bool(password_dict_words)
+            dict_file.close()
+        else:
+            print("\nDictionary check skipped to save resources\n")
 
     # check if check passed
-    if password_length & password_special_characters & password_character_checker & (password_5_digits is False):
+    if password_length & password_special_characters & password_character_checker & password_dict_checker \
+            & (password_5_digits is False):
         check_passed = True
 
     if check_passed:
-        print("\nPassword Check Passed!\n")
+        print("\nPassword Check Passed!\n"
+              + password + " is a good password\n")
     else:
         # TODO Print what went wrong
         print("\nPassword Check Failed\n")
