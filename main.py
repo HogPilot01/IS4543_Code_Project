@@ -3,10 +3,8 @@ import sys
 
 
 def main():
+    # TODO while loop to make smooth transition
     take_input()
-    # redundant call with calls in regex_check()
-    # Remove???
-    smooth_exit()
 
 
 def take_input():
@@ -17,17 +15,62 @@ def take_input():
 
 
 def regex_check(password):
-    # Checks the input password if it contains an illegal entry
-    # in this case, the word password
-    check = re.search("password", password)
-    if check:
-        print("Illegal word(s) found: " + check.group())
-        # Have to add exit method call here or smooth_exit will not execute if check passes
-        # Wtf??? This is dumb
-        smooth_exit()
+    # Checks the input password against password complexity rules
+    check_passed = False
+
+    # length checker
+    password_length = False
+    if (len(password) >= 16) & (len(password) <= 64):
+        password_length = True
+
+    # special character checker
+    password_special_characters = False
+    special_character_list = "`~!@#$%^&*()_-+={[}}|\\:;\"'<,>.?/"
+    for char in special_character_list:
+        check = (char in password)
+        if check:
+            password_special_characters = True
+            break
+
+    # Upper case, Lower case, & digit checker
+    password_character_checker = False
+    password_lower_case_checker = bool(re.search(r'[A-Z]', password))
+    password_upper_case_checker = bool(re.search(r'[a-z]', password))
+    password_digit_checker = bool(re.search(r'[0-9]', password))
+    if password_digit_checker & password_upper_case_checker & password_lower_case_checker:
+        password_character_checker = True
+
+    # 5 digits in a row checker
+    # we dont want there to be sequences of more than 4 digits in a row
+    password_5_digits = True
+    digits = r'\d\d\d\d\d'
+    check = re.search(digits, password)
+    if not check:
+        password_5_digits = False
+
+    # dictionary checker: checks against dictionary words
+    # will only run if all previous checks pass, otherwise will skip to save resources
+    #    password_dict_check_run = False
+    #    if password_length & password_special_characters & password_character_checker & (password_5_digits is False):
+    #        password_dict_check_run = True
+    #        dict_file = open('words.txt', 'r')
+    #        password_dict_checker = bool(re.findall(password, dict_file.read()))
+    #    else:
+    #        print("dictionary check skipped ")
+    #        # TODO skip dict check
+
+    # check if check passed
+    if password_length & password_special_characters & password_character_checker & (password_5_digits is False):
+        check_passed = True
+
+    if check_passed:
+        print("\nPassword Check Passed!\n")
     else:
-        print("Password Check Passed!")
-        smooth_exit()
+        # TODO Print what went wrong
+        print("\nPassword Check Failed\n")
+    # Have to add exit method call here or smooth_exit will not execute if check passes
+    # Wtf??? This is dumb
+    smooth_exit()
 
 
 def smooth_exit():
