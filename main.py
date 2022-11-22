@@ -9,7 +9,16 @@ def main():
 
 def take_input():
     # Takes in user input and prints it out
+    print("\nPassword Policy:"
+          "\n\tAll passwords should be between 16 & 64 characters long"
+          "\n\tAll passwords must not contain more than 4 digits in a row"
+          "\n\tAll passwords must contain at least one Special character, one Lower-case letter, "
+          "one Upper case letter, and one Number"
+          "\n\tAll passwords must also not contain any words in the dictionary"
+          "\n\n FYI: All spaces in the password will be removed\n")
     password = input("Please enter the Password you wish to check: ")
+    # remove spaces from the password
+    password = password.replace(' ', '')
     # input keywords
     keyword_list = []
     print("\nKeywords may include a Website Name, birth year, or other personal data.")
@@ -29,13 +38,14 @@ def regex_check(password, keyword_list):
     check_passed = False
 
     # length checker
-    password_length = False
-    if (len(password) >= 16) & (len(password) <= 64):
-        password_length = True
+    password_length_check = False
+    password_length = len(password)
+    if (password_length >= 16) & (password_length <= 64):
+        password_length_check = True
         print("Password is between 16 and 64 characters long")
     else:
-        print("Password is not between 16 and 64 characters long\n"
-              "The check has failed.")
+        print("\tPassword is not between 16 and 64 characters long\n"
+              "\tThe check has failed.")
 
     # special character checker
     password_special_characters = False
@@ -47,8 +57,8 @@ def regex_check(password, keyword_list):
             print("The Password contains at least one special character")
             break
     if password_special_characters is False:
-        print("The Password does not contain a special character\n"
-              "The check has failed.")
+        print("\tThe Password does not contain a special character\n"
+              "\tThe check has failed.")
 
     # Upper case, Lower case, & digit checker
     password_character_checker = False
@@ -59,8 +69,8 @@ def regex_check(password, keyword_list):
         password_character_checker = True
         print("The password contains at least one Upper case letter, Lower case letter, and one Number")
     else:
-        print("The password does not contain at least one Upper case letter, Lower case letter, and one Number\n"
-              "The check has failed.")
+        print("\tThe password does not contain at least one Upper case letter, Lower case letter, and one Number\n"
+              "\tThe check has failed.")
 
     # 5 digits in a row checker
     # we don't want there to be sequences of more than 4 digits in a row
@@ -71,8 +81,8 @@ def regex_check(password, keyword_list):
         password_5_digits = False
         print("The password does not contain more than 4 digits in a row")
     else:
-        print("The password contains more than 4 digits in a row\n"
-              "The check has failed.")
+        print("\tThe password contains more than 4 digits in a row\n"
+              "\tThe check has failed.")
 
     # keyword checker
     # checks to see if keywords entered earlier are in password
@@ -81,8 +91,8 @@ def regex_check(password, keyword_list):
         check = (x in password)
         if check:
             password_keywords = True
-            print("\n" + x + " has been found in the password.\n"
-                             "The check has failed")
+            print("\n\t\"" + x + "\" has been found in the password.\n"
+                                 "\tThe check has failed")
             break
     if password_keywords:
         print("No user entered keywords were found in the password")
@@ -90,17 +100,17 @@ def regex_check(password, keyword_list):
     # dictionary checker: checks against dictionary words
     # will only run if all previous checks pass, otherwise will skip to save resources
     password_dict_checker = False
-    if password_length & password_special_characters & password_character_checker & (password_5_digits is False) \
+    if password_length_check & password_special_characters & password_character_checker & (password_5_digits is False) \
             & (password_keywords is False):
         print("Dictionary Word Checker is running.\n"
               "Found words will be printed below.\n"
               "This may take some time...\n")
-        dict_file = open('Top1575-probable-v2.txt', 'r')
+        dict_file = open('words.txt', 'r')
         password_dict_checker = True
         # password_dict_words = (re.findall(dict_file.readline(), password))
         for line in dict_file:
             if (line.strip()) in password:
-                print('\"' + line.strip() + "\" is an illegal word ")
+                print('\t\"' + line.strip() + "\" is an illegal word.")
                 password_dict_checker = False
 
         # password_dict_checker = not bool(password_dict_words)
@@ -109,7 +119,7 @@ def regex_check(password, keyword_list):
         print("\nDictionary check skipped to save resources\n")
 
     # check if check passed
-    if password_length & password_special_characters & password_character_checker & password_dict_checker \
+    if password_length_check & password_special_characters & password_character_checker & password_dict_checker \
             & (password_5_digits is False) & (password_keywords is False):
         check_passed = True
 
@@ -117,7 +127,6 @@ def regex_check(password, keyword_list):
         print("\nPassword Check Passed!\n"
               + password + " is a good password\n")
     else:
-        # TODO Print what went wrong
         print("\nPassword Check Failed\n")
     # Have to add exit method call here or smooth_exit will not execute if check passes
     # Wtf??? This is dumb
@@ -129,7 +138,7 @@ def smooth_exit():
     # code from https://stackoverflow.com/questions/21759946/how-to-exit-program-using-the-enter-key
     exit_test = input("Press Enter to exit or input anything else to check another password: ")
     if not exit_test:
-        print("Exiting the Password Checker")
+        print("Exiting the Password Checker...")
         sys.exit()
     else:
         take_input()
